@@ -2,13 +2,15 @@
 set -euo pipefail
 
 SCRIPTPATH="$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
-ENABLE_DUO=0
-CREATE_APP_NAME=" "
-GIT_HASH="master"
+
 BITWARDEN_RS_FOLDER="bitwarden_rs"
-STRATEGY_TYPE="deploy"
+CREATE_APP_NAME=" "
+ENABLE_AUTOBUS_BACKUP=0
+ENABLE_DUO=0
+GIT_HASH="master"
 HEROKU_VERIFIED=0
 OFFSITE_HEROKU_DB=" "
+STRATEGY_TYPE="deploy"
 
 # Clean out any existing contents
 rm -rf ./${BITWARDEN_RS_FOLDER}
@@ -40,7 +42,14 @@ function heroku_bootstrap {
     then
         echo "We will use JawsDB Maria edition, which is free and sufficient for a small instance"
         heroku addons:create jawsdb -a "$APP_NAME"
-
+        
+        if [ "${ENABLE_AUTOBUS_BACKUP}" -eq "1" ]
+        then
+            echo "We will install AutoBus for database backup functionality now. AutoBus requires collaborator access to function."
+            heroku access:add user@email.com -a "$APP_NAME" --permissions operate
+            heroku addons:create autobus -a "$APP_NAME"
+        fi
+        
         echo "Now we use the JAWS DB config as the database URL for Bitwarden"
         echo "Supressing output due to sensitive nature."
         heroku config:set DATABASE_URL="$(heroku config:get JAWSDB_URL -a "${APP_NAME}")" -a "${APP_NAME}" > /dev/null
@@ -54,6 +63,22 @@ function heroku_bootstrap {
 
     echo "And set DB connections to seven in order not to saturate the free DB"
     heroku config:set DATABASE_MAX_CONNS=7 -a "${APP_NAME}"
+}
+
+function check_addons {
+
+    # Check if Autobus is added
+    if [ "${ENABLE_AUTOBUS_BACKUP}" -eq "1" ]
+    then
+        if (heroku addons -a "${APP_NAME}" | grep "autobus"); then
+            echo "Autobus is enabled, skipping."
+        else
+            echo "Autobus is not enabled, enabling."
+            echo "We will install AutoBus for database backup functionality now. AutoBus requires collaborator access to function."
+            heroku access:add user@email.com -a "$APP_NAME" --permissions operate
+            heroku addons:create autobus -a "$APP_NAME"
+        fi
+    fi
 }
 
 function build_image {
@@ -101,12 +126,13 @@ function help {
 while getopts d:a:g:t:v:u: flag
 do
     case "${flag}" in
-        d) ENABLE_DUO=${OPTARG};;
         a) CREATE_APP_NAME=${OPTARG};;
+        d) ENABLE_AUTOBUS_BACKUP=${OPTARG};;
+        d) ENABLE_DUO=${OPTARG};;
         g) GIT_HASH=${OPTARG};;
         t) STRATEGY_TYPE=${OPTARG};;
-        v) HEROKU_VERIFIED=${OPTARG};;
         u) OFFSITE_HEROKU_DB=${OPTARG};;
+        v) HEROKU_VERIFIED=${OPTARG};;
         *) HELP;;
     esac
 done
@@ -120,12 +146,14 @@ then
     echo "Run Heroku bootstrapping for app and Dyno creations."
     login_heroku
     heroku_bootstrap "${CREATE_APP_NAME}"
+    APP_NAME=${CREATE_APP_NAME}
     build_image
     echo "Congrats! Your new Bitwarden instance is ready to use! Head to Heroku, find the app, and use Open App to register!"
 elif [[ ${STRATEGY_TYPE} = "update" ]]
 then
     APP_NAME=${CREATE_APP_NAME}
     login_heroku
+    check_addons
     build_image
 else
     echo "Unexpected workflow, failing build"
