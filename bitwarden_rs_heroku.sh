@@ -9,6 +9,11 @@ BITWARDEN_RS_FOLDER="bitwarden_rs"
 STRATEGY_TYPE="deploy"
 HEROKU_VERIFIED=0
 OFFSITE_HEROKU_DB=" "
+SMTP_HOST=" "
+SMTP_FROM_MAIL=" "
+SMTP_FROM_NAME=" "
+SMTP_USER=" "
+SMTP_PASSWORD=" "
 
 # Clean out any existing contents
 rm -rf ./${BITWARDEN_RS_FOLDER}
