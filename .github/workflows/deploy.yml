@@ -12,7 +12,7 @@ env:
   HEROKU_VERIFIED: 1
   OFFSITE_HEROKU_DB: ${{ secrets.OFFSITE_HEROKU_DB }}
   SMTP_HOST: ${{ secrets.SMTP_HOST }} s
-  SMTP_FROM_MAIL: ${{ secrets.SMTP_FROM_MAI }} w
+  SMTP_FROM_MAIL: ${{ secrets.SMTP_FROM_MAIL }} w
   SMTP_FROM_NAME: ${{ secrets.SMTP_FROM_NAME }} x
   SMTP_USER: ${{ secrets.SMTP_USER }} y
   SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }} z
