@@ -119,11 +119,11 @@ do
         t) STRATEGY_TYPE=${OPTARG};;
         v) HEROKU_VERIFIED=${OPTARG};;
         u) OFFSITE_HEROKU_DB=${OPTARG};;
-        s) SMTP_HOST=${SMTP_HOST};;
-        w) SMTP_FROM_MAIL=${SMTP_FROM_MAIL};;
-        x) SMTP_FROM_NAME=${SMTP_FROM_NAME};;
-        y) SMTP_USER=${SMTP_USER};;
-        z) SMTP_PASSWORD=${SMTP_PASSWORD};;
+        s) SMTP_HOST=${OPTARG};;
+        w) SMTP_FROM_MAIL=${OPTARG};;
+        x) SMTP_FROM_NAME=${OPTARG};;
+        y) SMTP_USER=${OPTARG};;
+        z) SMTP_PASSWORD=${OPTARG};;
         *) HELP;;
     esac
 done
