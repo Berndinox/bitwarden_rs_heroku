@@ -11,11 +11,11 @@ env:
   HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
   HEROKU_VERIFIED: 1
   OFFSITE_HEROKU_DB: ${{ secrets.OFFSITE_HEROKU_DB }}
-  SMTP_HOST: ${{ secrets.SMTP_HOST }} s
-  SMTP_FROM_MAIL: ${{ secrets.SMTP_FROM_MAIL }} w
-  SMTP_FROM_NAME: ${{ secrets.SMTP_FROM_NAME }} x
-  SMTP_USER: ${{ secrets.SMTP_USER }} y
-  SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }} z
+  SMTP_HOST: ${{ secrets.SMTP_HOST }}
+  SMTP_FROM_MAIL: ${{ secrets.SMTP_FROM_MAIL }}
+  SMTP_FROM_NAME: ${{ secrets.SMTP_FROM_NAME }}
+  SMTP_USER: ${{ secrets.SMTP_USER }}
+  SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
 
 jobs:
   create_and_deploy_app:
