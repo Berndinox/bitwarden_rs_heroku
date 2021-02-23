@@ -131,6 +131,7 @@ echo "Enable Duo: $ENABLE_DUO";
 echo "Create App_Name: $CREATE_APP_NAME";
 echo "Git Hash: $GIT_HASH";
 echo "Heroku Verified: $HEROKU_VERIFIED";
+echo "SMTP User: $SMTP_USER";
 
 if [[ ${STRATEGY_TYPE} = "deploy" ]]
 then
