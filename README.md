@@ -1,3 +1,8 @@
+### outdated
+### for testing only
+### no warranty
+---------------------------
+
 # Bitwarden_rs on Heroku for Free!
 Deploy Bitwarden_rs in Heroku for free via Github1
 
